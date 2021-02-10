@@ -31,7 +31,7 @@ public class Player {
     }
 
     public void getPlayerHand(boolean hideCard) {
-        System.out.println(this.nickName + "s current hand.");
+        System.out.println(this.nickName + "r current hand.");
         for (int c = 0; c < playerNumOfCards; c++) {
             if (c == 0 && !hideCard) {
                 System.out.println("[Hidden card]");

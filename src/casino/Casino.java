@@ -2,6 +2,8 @@ package casino;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 
 import java.util.Random;
@@ -13,13 +15,13 @@ public class Casino {
     public static Random rand = new Random();
     //public static FileOutputStream fout=new FileOutputStream(System.getProperty("user.dir")+"\\users.txt");
 
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws FileNotFoundException, IOException {
         int userBalance = 1000;
+        //blackjack(userBalance);
         //logInMenu();
         //gamesMenu(userBalance);
         //textColour();
         signUp();
-        //roulette(userBalance);
     }
 
     public static void logInMenu() throws FileNotFoundException {
@@ -32,7 +34,7 @@ public class Casino {
         }
     }
 
-    public static void gamesMenu(int userBalance) {
+    public static void gamesMenu(int userBalance) throws FileNotFoundException, IOException {
         userBalance = userBalance;
         System.out.println("what game would you like to play?\n 1: roulette\n 2: blackjack\n 3: higher or lower\n 4: exit");
         int menuSelect = input.nextInt();
@@ -41,18 +43,19 @@ public class Casino {
                 roulette(userBalance);
                 break;
             case 2:
-                //blackjack();
+                blackjack(userBalance);
                 break;
             case 3:
                 //highOrLow();
                 break;
             case 4:
+                signOut(userBalance);
                 break;
 
         }
     }
 
-    public static void signUp() throws FileNotFoundException {
+    public static void signUp() throws FileNotFoundException, IOException {
         String folderDirectory = System.getProperty("user.dir") + "\\users.txt";
         File file = new File(folderDirectory);
         ArrayList<userBuild> masterList = new ArrayList<>();
@@ -78,10 +81,53 @@ public class Casino {
         String userID=Integer.toString(ser);
         String userBal=Integer.toString(userBalanc);
         userBuild newUser=new userBuild(userID, userName, userPW, userBal);
+        System.out.println("new user created:\n"+"ID   name  password  balance\n"+newUser);
         masterList.add(newUser);
+        
+        FileWriter myWriter = new FileWriter(file);
+        for(int i=0;i<masterList.size();i++){
+            String toBeWritten=(masterList.get(i)).toString();
+            //System.out.println(toBeWritten);
+            myWriter.write(toBeWritten);
+            if(i<masterList.size()-1){
+                myWriter.write("\n");
+            }
+        } myWriter.close();
+        int userBalance=1000;
+        gamesMenu(userBalance);
     }
-
-    private static void roulette(int userBalance) {
+    
+    private static void signOut(int userBalance) throws FileNotFoundException, IOException{
+        String folderDirectory = System.getProperty("user.dir") + "\\users.txt";
+        File file = new File(folderDirectory);
+        ArrayList<userBuild> masterList = new ArrayList<>();
+        Scanner scanFile = new Scanner(file);
+        int count =0;
+        while (scanFile.hasNextLine()) {
+            String userID = scanFile.next();
+            String userName = scanFile.next();
+            String userPW = scanFile.next();
+            String userBal = scanFile.next();
+            userBuild newUser = new userBuild(userID, userName, userPW, userBal);
+            masterList.add(newUser);
+            count++;
+        }
+        String newBalance=Integer.toString(userBalance);
+        masterList.get(count-1).setUserBal(newBalance);
+        System.out.println(masterList.get(count-1));
+        
+        FileWriter myWriter = new FileWriter(file);
+        for(int i=0;i<masterList.size();i++){
+            String toBeWritten=(masterList.get(i)).toString();
+            //System.out.println(toBeWritten);
+            myWriter.write(toBeWritten);
+            if(i<masterList.size()-1){
+                myWriter.write("\n");
+            }
+        } myWriter.close();
+    }
+    
+    private static void roulette(int userBalance) throws FileNotFoundException, IOException {
 
         int rouletteBux;
         System.out.println("select your number (odds are black, evens are red, 0 is green)");
@@ -150,7 +196,7 @@ public class Casino {
             dealer.getPlayerHand(false);
 
             do {
-                System.out.println("Would " + me.getNickName() + " like to bust or stay? 'Bust/Stay'");
+                System.out.println("Would " + me.getNickName() + " like to bust or stick? 'Bust/Stick'");
                 pAnswer = input.next();
                 if (pAnswer.equalsIgnoreCase("Bust")) {
                     me.addCard(deck1.dealNextCard());
@@ -160,8 +206,8 @@ public class Casino {
                         System.exit(0);
                     }
                 }
-                if (pAnswer.equalsIgnoreCase("stay")) {
-                    System.out.println("You have chosen to stay. Your hand: " + me.getHandSum());
+                if (pAnswer.equalsIgnoreCase("stick")) {
+                    System.out.println("You have chosen to stick. Your hand: " + me.getHandSum());
                 }
 
             } while (pAnswer.equalsIgnoreCase("Bust"));

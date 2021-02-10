@@ -12,7 +12,7 @@ public class DeckOfCards {
 
     public DeckOfCards() {
 
-        Face[] faces = {Face.ACE, Face.DEUCE, Face.THREE, Face.FOUR, Face.FIVE, Face.SIX,
+        Face[] faces = {Face.ACE, Face.TWO, Face.THREE, Face.FOUR, Face.FIVE, Face.SIX,
             Face.SEVEN, Face.EIGHT, Face.NINE, Face.TEN, Face.JACK, Face.QUEEN,
             Face.KING};
         Suit[] suits = {Suit.HEARTS, Suit.SPADES, Suit.DIAMONDS, Suit.CLUBS};
