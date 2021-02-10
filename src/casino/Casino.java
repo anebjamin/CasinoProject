@@ -19,9 +19,10 @@ public class Casino {
         //gamesMenu(userBalance);
         //textColour();
         signUp();
+        //roulette(userBalance);
     }
 
-    public static void logInMenu() {
+    public static void logInMenu() throws FileNotFoundException {
         System.out.println("Please enter what you would like to do\n  1) sign up\n  2) log in\n  3) exit\n");
         int menuSelect = input.nextInt();
         switch (menuSelect) {
@@ -54,25 +55,42 @@ public class Casino {
     public static void signUp() throws FileNotFoundException {
         String folderDirectory = System.getProperty("user.dir") + "\\users.txt";
         File file = new File(folderDirectory);
-        ArrayList<String> masterList = new ArrayList<>();
+        ArrayList<userBuild> masterList = new ArrayList<>();
         Scanner scanFile = new Scanner(file);
+        int count =0;
         while (scanFile.hasNextLine()) {
             String userID = scanFile.next();
             String userName = scanFile.next();
             String userPW = scanFile.next();
             String userBal = scanFile.next();
             userBuild newUser = new userBuild(userID, userName, userPW, userBal);
-            //System.out.println(newUser);
+            masterList.add(newUser);
+            count++;
         }
-
+        String lastUser=(masterList.get(count-1)).toString();
+        int NewUserID=Integer.parseInt(lastUser.substring(0,4));
+        int ser=NewUserID+1;
+        System.out.println("enter username");
+        String userName=input.next();
+        System.out.println("enter password");
+        String userPW=input.next();
+        int userBalanc = 1000;
+        String userID=Integer.toString(ser);
+        String userBal=Integer.toString(userBalanc);
+        userBuild newUser=new userBuild(userID, userName, userPW, userBal);
+        masterList.add(newUser);
     }
 
     private static void roulette(int userBalance) {
 
         int rouletteBux;
         System.out.println("select your number (odds are black, evens are red, 0 is green)");
-        for (int i = 0; i < 37; i++) {
-            System.out.print(i + ", ");
+        System.out.print("\u001b[32m"+"0" + "\u001B[30m"+", ");
+        for (int i = 1; i < 37; i++) {
+            System.out.print(i+", " );
+            i++;
+            System.out.print("\u001b[31m"+i + "\u001B[30m"+", ");
+            
         }
         System.out.println("");
         int userNum = input.nextInt();

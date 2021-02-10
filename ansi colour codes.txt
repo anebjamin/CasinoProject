@@ -1,0 +1,1 @@
+System.out.println("\u001b[31m"+"Hi there");   	red
