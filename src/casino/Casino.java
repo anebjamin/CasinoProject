@@ -13,18 +13,12 @@ public class Casino {
 
     public static Scanner input = new Scanner(System.in);
     public static Random rand = new Random();
-    //public static FileOutputStream fout=new FileOutputStream(System.getProperty("user.dir")+"\\users.txt");
 
     public static void main(String[] args) throws FileNotFoundException, IOException {
-        int userBalance = 1000;
-        //blackjack(userBalance);
-        //logInMenu();
-        //gamesMenu(userBalance);
-        //textColour();
-        signUp();
+        signUp();    
     }
 
-    public static void logInMenu() throws FileNotFoundException {
+    public static void logInMenu() throws FileNotFoundException, IOException {
         System.out.println("Please enter what you would like to do\n  1) sign up\n  2) log in\n  3) exit\n");
         int menuSelect = input.nextInt();
         switch (menuSelect) {
@@ -46,7 +40,7 @@ public class Casino {
                 blackjack(userBalance);
                 break;
             case 3:
-                //highOrLow();
+                higherLower(userBalance);
                 break;
             case 4:
                 signOut(userBalance);
@@ -60,7 +54,7 @@ public class Casino {
         File file = new File(folderDirectory);
         ArrayList<userBuild> masterList = new ArrayList<>();
         Scanner scanFile = new Scanner(file);
-        int count =0;
+        int count = 0;
         while (scanFile.hasNextLine()) {
             String userID = scanFile.next();
             String userName = scanFile.next();
@@ -70,39 +64,40 @@ public class Casino {
             masterList.add(newUser);
             count++;
         }
-        String lastUser=(masterList.get(count-1)).toString();
-        int NewUserID=Integer.parseInt(lastUser.substring(0,4));
-        int ser=NewUserID+1;
+        String lastUser = (masterList.get(count - 1)).toString();
+        int NewUserID = Integer.parseInt(lastUser.substring(0, 4));
+        int ser = NewUserID + 1;
         System.out.println("enter username");
-        String userName=input.next();
+        String userName = input.next();
         System.out.println("enter password");
-        String userPW=input.next();
+        String userPW = input.next();
         int userBalanc = 1000;
-        String userID=Integer.toString(ser);
-        String userBal=Integer.toString(userBalanc);
-        userBuild newUser=new userBuild(userID, userName, userPW, userBal);
-        System.out.println("new user created:\n"+"ID   name  password  balance\n"+newUser);
+        String userID = Integer.toString(ser);
+        String userBal = Integer.toString(userBalanc);
+        userBuild newUser = new userBuild(userID, userName, userPW, userBal);
+        System.out.println("new user created:\n" + "ID   name  password  balance\n" + newUser);
         masterList.add(newUser);
-        
+
         FileWriter myWriter = new FileWriter(file);
-        for(int i=0;i<masterList.size();i++){
-            String toBeWritten=(masterList.get(i)).toString();
+        for (int i = 0; i < masterList.size(); i++) {
+            String toBeWritten = (masterList.get(i)).toString();
             //System.out.println(toBeWritten);
             myWriter.write(toBeWritten);
-            if(i<masterList.size()-1){
+            if (i < masterList.size() - 1) {
                 myWriter.write("\n");
             }
-        } myWriter.close();
-        int userBalance=1000;
+        }
+        myWriter.close();
+        int userBalance = 1000;
         gamesMenu(userBalance);
     }
-    
-    private static void signOut(int userBalance) throws FileNotFoundException, IOException{
+
+    private static void signOut(int userBalance) throws FileNotFoundException, IOException {
         String folderDirectory = System.getProperty("user.dir") + "\\users.txt";
         File file = new File(folderDirectory);
         ArrayList<userBuild> masterList = new ArrayList<>();
         Scanner scanFile = new Scanner(file);
-        int count =0;
+        int count = 0;
         while (scanFile.hasNextLine()) {
             String userID = scanFile.next();
             String userName = scanFile.next();
@@ -112,31 +107,32 @@ public class Casino {
             masterList.add(newUser);
             count++;
         }
-        String newBalance=Integer.toString(userBalance);
-        masterList.get(count-1).setUserBal(newBalance);
-        System.out.println(masterList.get(count-1));
-        
+        String newBalance = Integer.toString(userBalance);
+        masterList.get(count - 1).setUserBal(newBalance);
+        System.out.println(masterList.get(count - 1));
+
         FileWriter myWriter = new FileWriter(file);
-        for(int i=0;i<masterList.size();i++){
-            String toBeWritten=(masterList.get(i)).toString();
+        for (int i = 0; i < masterList.size(); i++) {
+            String toBeWritten = (masterList.get(i)).toString();
             //System.out.println(toBeWritten);
             myWriter.write(toBeWritten);
-            if(i<masterList.size()-1){
+            if (i < masterList.size() - 1) {
                 myWriter.write("\n");
             }
-        } myWriter.close();
+        }
+        myWriter.close();
     }
-    
+
     private static void roulette(int userBalance) throws FileNotFoundException, IOException {
 
         int rouletteBux;
         System.out.println("select your number (odds are black, evens are red, 0 is green)");
-        System.out.print("\u001b[32m"+"0" + "\u001B[30m"+", ");
+        System.out.print("\u001b[32m" + "0" + "\u001B[30m" + ", ");
         for (int i = 1; i < 37; i++) {
-            System.out.print(i+", " );
+            System.out.print(i + ", ");
             i++;
-            System.out.print("\u001b[31m"+i + "\u001B[30m"+", ");
-            
+            System.out.print("\u001b[31m" + i + "\u001B[30m" + ", ");
+
         }
         System.out.println("");
         int userNum = input.nextInt();
@@ -171,6 +167,38 @@ public class Casino {
         gamesMenu(userBalance);
     }
 
+    public static void higherLower(int userBalance) throws IOException {
+        String[] cardFace = {"Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King",};
+        String[] cardSuit = {"Clubs", "Hearts", "Spades", "Diamonds"};
+        boolean winning = true;
+        int winnings = 0;
+        while (winning == true) {
+            userBalance-=25;
+            int cardRandomFace = rand.nextInt(13);
+            int cardRandomSuit = rand.nextInt(4);
+            System.out.println("the current card is the " + cardFace[cardRandomFace] + " of " + cardSuit[cardRandomSuit]);
+            System.out.println("higher or lower?ACE=low(h/l)");
+            String highLow = input.next().toLowerCase();
+            int numberStore = cardRandomFace;
+            cardRandomFace = rand.nextInt(13);
+            cardRandomSuit = rand.nextInt(4);
+            System.out.println("the next card is the " + cardFace[cardRandomFace] + " of " + cardSuit[cardRandomSuit]);
+            if (((highLow.equals("high")) && (cardRandomFace > numberStore)) || ((highLow.equals("low")) && (cardRandomFace < numberStore))) {
+                System.out.println("you win! play again?(Y/N)");
+                String PlayerContinue = input.next().toLowerCase();
+                if (PlayerContinue.equals("n")) {
+                    winning = false;
+                } else {
+                    winnings += 50;
+                }
+            } else {
+                System.out.println("you lose!");
+                winnings=0;
+            }
+        }userBalance+=winnings;
+        gamesMenu(userBalance);
+    }
+
     private static void blackjack(int userBalance) {
         boolean stay = false;
         Player me = new Player("you");
@@ -181,8 +209,8 @@ public class Casino {
 
         if (pAnswer.equalsIgnoreCase("Yes")) {
             System.out.println("how much money would you like to bet?(max 100)");
-            int blackjackBux=input.nextInt();
-            userBalance-=blackjackBux;
+            int blackjackBux = input.nextInt();
+            userBalance -= blackjackBux;
             DeckOfCards deck1 = new DeckOfCards();
             Card card1 = new Card(Face.ACE, Suit.CLUBS);
             deck1.shuffleDeck();
@@ -234,7 +262,7 @@ public class Casino {
                         System.out.println("Both players has decided to stay. The winner is " + dealer.getNickName() + " with a total of " + totalDealerSum + ".");
                     } else {
                         System.out.println("Both players has decided to stay. The winner is " + me.getNickName() + " with a total of " + totalPlayerSum + ".");
-                        userBalance+=blackjackBux*1.5;
+                        userBalance += blackjackBux * 1.5;
                     }
                     stay = false;
                 }
@@ -242,13 +270,4 @@ public class Casino {
             } while (stay);
         }
     }
-
-
-private static void textColour() {
-        String BLACK = "\033[0;30m";   // BLACK
-        String RED = "\033[0;31m";     // RED
-        String GREEN = "\033[0;32m";   // GREEN
-        System.out.println("hello GREEN");
-    }
-
 }
